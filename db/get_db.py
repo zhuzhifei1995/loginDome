@@ -8,4 +8,3 @@ def get_login_connect():
                               db='login',
                               charset='utf8')
     return connect
-

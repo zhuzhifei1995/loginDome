@@ -54,7 +54,7 @@ def insert_message(user_id, friend_id, create_time, message, message_type):
         connect = get_db.get_login_connect()
         cursor = connect.cursor()
         user_ship_id = insert_message_ship(user_id, friend_id)['id']
-        sql = 'INSERT INTO message (user_ship_id, message,create_time,send_user_id, message_type) ' \
+        sql = 'INSERT INTO message (user_ship_id, message,create_time,send_user_id, message_type)' \
               'VALUES (' + str(user_ship_id) + ',"' + message + '","' + create_time \
               + '",' + user_id + ',' + message_type + ')'
         print(sql)

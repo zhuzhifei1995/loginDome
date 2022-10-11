@@ -55,7 +55,7 @@ def query_user_by_login_number(login_number):
                     'nick_name': nick_name,
                     'password': password,
                     'create_time': str(create_time),
-                    'photo': "http://" + ip + ":8080/static/image/user/photo/"+photo,
+                    'photo': "http://" + ip + ":8080/static/image/user/photo/" + photo,
                     'phone': phone,
                     'login_number': login_number,
                     }
@@ -63,6 +63,26 @@ def query_user_by_login_number(login_number):
     except Exception as e:
         print(e)
         return user
+
+
+def update_user_nike_name_by_id(user_id, nick_name):
+    connect = get_db.get_login_connect()
+    try:
+        cursor = connect.cursor()
+        sql = 'UPDATE `user` SET nick_name = "' + nick_name + '" WHERE id =' + user_id
+        print(sql)
+        status = cursor.execute(sql)
+        connect.commit()
+        connect.close()
+        if status == 1:
+            return 1
+        else:
+            return 0
+    except Exception as e:
+        connect.rollback()
+        connect.close()
+        print(e)
+        return -1
 
 
 def query_user_by_id(user_id):
@@ -89,7 +109,7 @@ def query_user_by_id(user_id):
                 'photo': photo,
                 'phone': phone,
                 'login_number': login_number,
-                }
+            }
         return user
     except Exception as e:
         print(e)
@@ -122,7 +142,7 @@ def query_all_user(user_id):
                     'photo': "http://" + ip + ":8080/static/image/user/photo/" + photo,
                     'phone': phone,
                     'login_number': login_number,
-                    }
+                }
                 users.append(user)
         return users
     except Exception as e:
@@ -154,7 +174,7 @@ def query_user_by_phone(phone):
                 'photo_url': photo_url,
                 'phone': phone,
                 'login_number': login_number,
-                }
+            }
         return user
     except Exception as e:
         print(e)
@@ -167,4 +187,3 @@ def get_verification_code():
         ch = chr(random.randrange(ord('0'), ord('9') + 1))
         verification_code += ch
     return verification_code
-

@@ -16,20 +16,21 @@ app.config['UPLOAD_FOLDER_USER_MESSAGE'] = 'static/image/message/'
 app.config['UPLOAD_FOLDER_VOICE_MESSAGE'] = 'static/voice/message/'
 
 
+@app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
-def _():
+def index():
     data = {
         'code': '0',
         'status': '服务器启动成功!'
     }
     return data
+    
 
-
-@app.route('/index', methods=['GET', 'POST'])
-def index():
+@app.errorhandler(404)
+def error_date():
     data = {
         'code': '0',
-        'status': '服务器启动成功!'
+        'status': '404!'
     }
     return data
 
@@ -188,6 +189,38 @@ def update_user_photo():
         data = {
             'code': '0',
             'status': '修改头像失败，不支持的请求，请重试！'
+        }
+    print(data)
+    return data
+
+
+@app.route('/update_user_nike_name_by_id', methods=['GET', 'POST'])
+def update_user_nike_name_by_id():
+    if request.method == 'POST':
+        user_id = request.form.get("user_id")
+        nick_name = request.form.get("nick_name")
+        status = userdao.update_user_nike_name_by_id(user_id, nick_name)
+        print(status)
+        if status == 1:
+            data = {
+                'code': '1',
+                'status': '修改成功！',
+                'nick_name': nick_name
+            }
+        elif status == 0:
+            data = {
+                'code': '0',
+                'status': '用户不存在，修改失败，请重试！'
+            }
+        else:
+            data = {
+                'code': '0',
+                'status': '操作数据库失败，修改失败，请重试！'
+            }
+    else:
+        data = {
+            'code': '0',
+            'status': '修改失败，不支持的请求，请重试！'
         }
     print(data)
     return data
