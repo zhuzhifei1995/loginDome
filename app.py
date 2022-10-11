@@ -27,11 +27,12 @@ def index():
     
 
 @app.errorhandler(404)
-def error_date():
+def error_date(error):
     data = {
         'code': '0',
         'status': '404!'
     }
+    print(error)
     return data
 
 
@@ -200,12 +201,42 @@ def update_user_nike_name_by_id():
         user_id = request.form.get("user_id")
         nick_name = request.form.get("nick_name")
         status = userdao.update_user_nike_name_by_id(user_id, nick_name)
-        print(status)
         if status == 1:
             data = {
                 'code': '1',
-                'status': '修改成功！',
+                'status': '修改昵称成功！',
                 'nick_name': nick_name
+            }
+        elif status == 0:
+            data = {
+                'code': '0',
+                'status': '用户不存在，修改失败，请重试！'
+            }
+        else:
+            data = {
+                'code': '0',
+                'status': '操作数据库失败，修改失败，请重试！'
+            }
+    else:
+        data = {
+            'code': '0',
+            'status': '修改失败，不支持的请求，请重试！'
+        }
+    print(data)
+    return data
+
+
+@app.route('/update_password_by_id', methods=['GET', 'POST'])
+def update_password_by_id():
+    if request.method == 'POST':
+        user_id = request.form.get("user_id")
+        password = request.form.get("password")
+        status = userdao.update_password_by_id(user_id, password)
+        if status == 1:
+            data = {
+                'code': '1',
+                'status': '修改密码成功！',
+                'password': password
             }
         elif status == 0:
             data = {

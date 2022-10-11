@@ -85,6 +85,26 @@ def update_user_nike_name_by_id(user_id, nick_name):
         return -1
 
 
+def update_password_by_id(user_id, password):
+    connect = get_db.get_login_connect()
+    try:
+        cursor = connect.cursor()
+        sql = 'UPDATE `user` SET password = "' + password + '" WHERE id =' + user_id
+        print(sql)
+        status = cursor.execute(sql)
+        connect.commit()
+        connect.close()
+        if status == 1:
+            return 1
+        else:
+            return 0
+    except Exception as e:
+        connect.rollback()
+        connect.close()
+        print(e)
+        return -1
+
+
 def query_user_by_id(user_id):
     user = {}
     connect = get_db.get_login_connect()
