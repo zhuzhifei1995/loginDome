@@ -1,11 +1,9 @@
 import datetime
-import logging
 import os
 import socket
 import uuid
-from logging import Formatter, FileHandler
 
-from flask import Flask, request
+from flask import Flask, request, url_for
 
 from dao import userdao, messagedao
 
@@ -297,7 +295,6 @@ def send_message():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         friend_id = request.form.get('friend_id')
-        # message_type 1 文本 ，2 图片 3 语音
         message_type = request.form.get('message_type')
         create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if message_type == '1':
@@ -419,10 +416,6 @@ def phone_is_register_user():
 
 
 if __name__ == '__main__':
-    file_handler = FileHandler('app.log')
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s %(username)s: %(message)s'))
-    app.logger.addHandler(file_handler)
+    print(socket.gethostbyname(socket.gethostname()))
     app.run(debug=True, host='0.0.0.0', port=8080)
 
