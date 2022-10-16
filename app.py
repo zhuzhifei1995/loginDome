@@ -3,7 +3,7 @@ import os
 import socket
 import uuid
 
-from flask import Flask, request, url_for
+from flask import Flask, request
 
 from dao import userdao, messagedao
 
@@ -22,7 +22,7 @@ def index():
         'status': '服务器启动成功!'
     }
     return data
-    
+
 
 @app.errorhandler(404)
 def error_date(error):
@@ -135,7 +135,7 @@ def query_all_user():
     return data
 
 
-@app.route('/query_user_by_id',methods=['GET', 'POST'])
+@app.route('/query_user_by_id', methods=['GET', 'POST'])
 def query_user_by_id():
     if request.method == 'POST':
         user_id = request.form.get("id")
@@ -145,14 +145,15 @@ def query_user_by_id():
             'code': '1',
             'status': '获取用户信息成功！',
             'message': {
-                    'id': user['id'],
-                    'phone': user['phone'],
-                    'password': user['password'],
-                    'photo_url': "http://" + ip + ":8080/static/image/user/photo/" + user['photo'],
-                    'nick_name': user['nick_name'],
-                    'create_time': user['create_time'],
-                    'login_number': user['login_number'],
-                }
+                'id': user['id'],
+                'phone': user['phone'],
+                'password': user['password'],
+                'photo_url': "http://" + ip + ":8080/static/image/user/photo/" + user['photo'],
+                'nick_name': user['nick_name'],
+                'create_time': user['create_time'],
+                'login_number': user['login_number'],
+                'android_id': user['android_id']
+            }
         }
     else:
         data = {
@@ -291,6 +292,7 @@ def login_user():
     if request.method == 'POST':
         login_number = request.form.get("login_number")
         password = request.form.get("password")
+        android_id = request.form.get("android_id")
         user = userdao.query_user_by_login_number(login_number)
         if user == {}:
             data = {
@@ -300,6 +302,7 @@ def login_user():
             }
         else:
             if password == user['password']:
+                userdao.update_android_id_by_id(str(user['id']), android_id)
                 data = {
                     'code': '1',
                     'status': '登陆成功！',
@@ -332,12 +335,12 @@ def send_message():
             message = request.form.get('message')
         elif message_type == '2':
             photo = request.files.get("file")
-            message = request.form.get('message')+".png"
+            message = request.form.get('message') + ".png"
             file_path = os.path.join(app.config['UPLOAD_FOLDER_USER_MESSAGE']) + message
             photo.save(file_path)
         else:
             photo = request.files.get("file")
-            message = request.form.get('message')+".amr"
+            message = request.form.get('message') + ".amr"
             file_path = os.path.join(app.config['UPLOAD_FOLDER_VOICE_MESSAGE']) + message
             photo.save(file_path)
         messagedao.insert_message(str(user_id), str(friend_id), create_time, message, message_type)
@@ -449,4 +452,3 @@ def phone_is_register_user():
 if __name__ == '__main__':
     print(socket.gethostbyname(socket.gethostname()))
     app.run(debug=True, host='0.0.0.0', port=8080)
-

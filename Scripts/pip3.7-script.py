@@ -1,8 +1,10 @@
 #!D:\work\pycham_work\chat_login\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'pip==19.0.3','console_scripts','pip3.7'
 __requires__ = 'pip==19.0.3'
+
 import re
 import sys
+
 from pkg_resources import load_entry_point
 
 if __name__ == '__main__':

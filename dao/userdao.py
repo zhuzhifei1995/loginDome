@@ -51,14 +51,15 @@ def query_user_by_login_number(login_number):
             create_time = row[3]
             photo = row[4]
             phone = row[5]
-            user = {'id': user_id,
-                    'nick_name': nick_name,
-                    'password': password,
-                    'create_time': str(create_time),
-                    'photo': "http://" + ip + ":8080/static/image/user/photo/" + photo,
-                    'phone': phone,
-                    'login_number': login_number,
-                    }
+            user = {
+                'id': user_id,
+                'nick_name': nick_name,
+                'password': password,
+                'create_time': str(create_time),
+                'photo': "http://" + ip + ":8080/static/image/user/photo/" + photo,
+                'phone': phone,
+                'login_number': login_number,
+            }
         return user
     except Exception as e:
         print(e)
@@ -125,6 +126,26 @@ def update_phone_by_id(user_id, phone):
         return -1
 
 
+def update_android_id_by_id(user_id, android_id):
+    connect = get_db.get_login_connect()
+    try:
+        cursor = connect.cursor()
+        sql = 'UPDATE `user` SET android_id = "' + android_id + '" WHERE id =' + user_id
+        print(sql)
+        status = cursor.execute(sql)
+        connect.commit()
+        connect.close()
+        if status == 1:
+            return 1
+        else:
+            return 0
+    except Exception as e:
+        connect.rollback()
+        connect.close()
+        print(e)
+        return -1
+
+
 def query_user_by_id(user_id):
     user = {}
     connect = get_db.get_login_connect()
@@ -141,6 +162,7 @@ def query_user_by_id(user_id):
             photo = row[4]
             phone = row[5]
             login_number = row[6]
+            android_id = row[7]
             user = {
                 'id': str(user_id),
                 'nick_name': nick_name,
@@ -149,6 +171,7 @@ def query_user_by_id(user_id):
                 'photo': photo,
                 'phone': phone,
                 'login_number': login_number,
+                'android_id': android_id
             }
         return user
     except Exception as e:
