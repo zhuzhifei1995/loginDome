@@ -18,7 +18,7 @@ app.config['UPLOAD_FOLDER_VOICE_MESSAGE'] = 'static/voice/message/'
 @app.route('/', methods=['GET', 'POST'])
 def index():
     data = {
-        'code': '0',
+        'code': '1',
         'status': '服务器启动成功!'
     }
     return data
@@ -27,7 +27,7 @@ def index():
 @app.errorhandler(404)
 def error_date(error):
     data = {
-        'code': '0',
+        'code': '1',
         'status': '404!'
     }
     print(error)

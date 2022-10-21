@@ -1,6 +1,7 @@
 import random
 import socket
 
+from dao.util import get_qr_code
 from db import get_db
 
 
@@ -59,6 +60,7 @@ def query_user_by_login_number(login_number):
                 'photo': "http://" + ip + ":8080/static/image/user/photo/" + photo,
                 'phone': phone,
                 'login_number': login_number,
+                'qr_code_url': get_qr_code(phone),
             }
         return user
     except Exception as e:
