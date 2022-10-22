@@ -11,7 +11,6 @@ def get_qr_code(phone):
         "mhid": 'tBTGXVntncwhMHYoL9VUMa8',
     }
     html = requests.request(method="post", url=url, params=params).text
+    # print(html)
     pq_html = PyQuery(''.join([html.replace('</body>', '').replace('</html>', ''), '</body></html>', ]))
-    return pq_html('.qrcode_plugins_box_body img').attr('src')
-
-
+    return 'https://'+pq_html('.qrcode_plugins_box_body img').attr('src')[2:]

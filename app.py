@@ -6,6 +6,7 @@ import uuid
 from flask import Flask, request
 
 from dao import userdao, messagedao
+from dao.util import get_qr_code
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -152,7 +153,8 @@ def query_user_by_id():
                 'nick_name': user['nick_name'],
                 'create_time': user['create_time'],
                 'login_number': user['login_number'],
-                'android_id': user['android_id']
+                'android_id': user['android_id'],
+                'qr_code_url': get_qr_code(user['phone']),
             }
         }
     else:
